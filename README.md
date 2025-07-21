@@ -27,9 +27,10 @@ The ESP32-based Indicator System simulates vehicle turn and hazard indicators wi
 
 ### ✅ Functional Requirements Implemented
 
-- Left / Right LED toggle on 1-second button press
-- Hazard mode activation with simultaneous 1-second press of both buttons
-- Hazard mode exit by holding either button again for 1 second
+- Left / Right LED toggle on 1-second button press.
+- Pressing opposite button switches indicator.
+- Hazard mode activation with simultaneous 1-second press of both buttons.
+- Hazard mode exit by holding either button again for 1 second.
 - 300ms ON/OFF LED blinking for active indicators
 - 100ms scheduler for task execution
 - UART logs for:
