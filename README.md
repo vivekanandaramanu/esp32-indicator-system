@@ -38,6 +38,7 @@ The goal is to build a modular indicator control system similar to a real vehicl
 ## 🔧 Features Implemented
 
 - ✅ 1-second hold toggles LEFT / RIGHT indicators
+- ✅ Pressing opposite button switches indicator.
 - ✅ Hazard Mode ON: Both buttons held for 1 second
 - ✅ Hazard Mode OFF: Press either button again for 1 second
 - ✅ LED Blinking Interval: 300ms ON/OFF
@@ -52,7 +53,7 @@ The goal is to build a modular indicator control system similar to a real vehicl
 ### ▶️ Base Layer (in C using ESP-IDF)
 
 - `gpio_driver.c/h` – handles push button input
-- `pwm_driver.c/h` – controls LED brightness with PWM
+- `pwm_driver.c/h` – controls LED brightness with PWM (LED on Status)
 - `hw_timer_driver.c/h` – sets up hardware timer for 1-second hold detection
 - `indicator_main.c` – scheduler with 100ms FreeRTOS tasks
 - `CMakeLists.txt` – build file
