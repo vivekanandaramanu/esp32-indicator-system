@@ -64,7 +64,7 @@ void hw_timer_init(timer_callback_t cb)
     timer_enable_intr(TIMER_GROUP, TIMER_IDX);
     timer_isr_callback_add(TIMER_GROUP, TIMER_IDX, timer_isr_callback, NULL, 0);
 
-    ESP_LOGI(TAG, "Hardware timer initialized");
+   // ESP_LOGI(TAG, "Hardware timer initialized");      // optional debug log to check (if timer initialized successfully)
 }
 
 /**
@@ -73,7 +73,7 @@ void hw_timer_init(timer_callback_t cb)
 void hw_timer_start(void)
 {
     if (!timer_running) {
-        ESP_LOGI(TAG, "Starting Timer");
+        //ESP_LOGI(TAG, "Starting Timer");    //optional debug log 
 
         timer_set_counter_value(TIMER_GROUP, TIMER_IDX, 0);
         timer_set_alarm_value(TIMER_GROUP, TIMER_IDX, TIMER_INTERVAL_SEC * 1000000);  // 1 sec
@@ -91,7 +91,7 @@ void hw_timer_start(void)
 void hw_timer_stop(void)
 {
     if (timer_running) {
-        ESP_LOGI(TAG, "Stopping Timer");
+        //ESP_LOGI(TAG, "Stopping Timer");     //optional debug log
 
         timer_pause(TIMER_GROUP, TIMER_IDX);
         timer_set_counter_value(TIMER_GROUP, TIMER_IDX, 0);

@@ -1,118 +1,84 @@
-# 🚦 ESP32-Based Indicator Control System
+# ESP32 Indicator System
 
-This project is my submission for the assignment titled **“Indicators control over mobile phones (using BLE Protocol)”**. The implemented version here is based on **GPIO buttons and PWM LEDs**, and is designed to be extended later using **MATLAB Simulink** and BLE integration.
+## 📌 Project Title
+**Indicators Control Over Mobile Phones (using BLE Protocol)**
 
----
+## 👤 Author Information
+- **Name:** Uppula Vivekananda Raman  
+- **Institute:** Sreenidhi Institute of Science and Technology, Hyderabad.  
+- **Submission Date:** 21-07-2025  
 
-## 📌 1. High-Level Architecture and Software Requirement Specification
+## 📁 Repository
+- **GitHub Link:** [ESP32 Indicator System](https://github.com/vivekanandaramanu/esp32-indicator-system)
 
-### ▶️ Base Software (Developed in C using ESP-IDF)
-This layer handles low-level drivers and system scheduling:
-- **GPIO Driver:** Reads input from physical push buttons.
-- **PWM Driver:** Controls brightness of left and right indicator LEDs.
-- **Hardware Timer Driver:** Detects 1-second button hold using a one-shot hardware timer.
-- **UART Logging:** All events like button presses, indicator toggling, and LED state are logged over UART.
+## 🎥 Demonstration Video
+- **Google Drive Link:** [Working Demo Video (Zipped)](https://drive.google.com/file/d/1q4hKbzImOk4m6uuVi8Ycv6JALjvGyG4a/view?usp=sharing)
 
-### ▶️ Application Software (Developed in C)
-Implements the indicator system logic:
-- **Left/Right Button Hold for 1s** → Toggles corresponding indicator.
-- **Opposite Button Hold While One LED is ON** → Switches indicator.
-- **Both Buttons Hold for 1s** → Enables or disables **Hazard Mode**.
-- **Hazard Exit** → Triggered by pressing either button for 1s.
-- **Blinking Pattern** → 300ms ON/OFF for all modes except OFF.
-- **100ms Scheduler** → Both base and app tasks run periodically every 100ms using FreeRTOS.
+## 📝 UART Log File (via TTL Logger)
+- **UART Log File:** [`indicator_log.txt`](indicator_log.txt)
+- **Logger Used:** HW-417-V1.2 USB-to-TTL module  
+- **Tool Used:** Tera Term for real-time monitoring and log export
 
 ---
 
-## ⚙️ 2. Functional Features Implemented
+## 🛠️ Project Overview
 
-- ✅ Indicator toggling with 1-second button hold
-- ✅ Switching from left to right and vice versa
-- ✅ Hazard mode entry and exit
-- ✅ LED PWM blinking at 300ms interval
-- ✅ All button/LED/mode activity is published over UART
-- ✅ Modular code using custom drivers
-- ✅ Application logic separated for future Simulink integration
+The ESP32-based Indicator System simulates vehicle turn and hazard indicators with button inputs and LED outputs. It includes logic for left/right toggle, hazard mode activation/deactivation, and logs all events via UART.
 
----
+### ✅ Functional Requirements Implemented
 
-## 🔧 Hardware Setup
+- Left / Right LED toggle on 1-second button press
+- Hazard mode activation with simultaneous 1-second press of both buttons
+- Hazard mode exit by holding either button again for 1 second
+- 300ms ON/OFF LED blinking for active indicators
+- 100ms scheduler for task execution
+- UART logs for:
+  - Button presses
+  - LED status
+  - Indicator mode transitions
 
-| Component     | GPIO Pin  | Notes                      |
-|--------------|-----------|-----------------------------|
-| Left Button   | GPIO 14   | Active Low (Pulled Up)     |
-| Right Button  | GPIO 4    | Active Low (Pulled Up)     |
-| Left LED      | GPIO 17   | PWM Channel 0              |
-| Right LED     | GPIO 16   | PWM Channel 1              |
-| Board         | ESP32-WROOM |
+### 🔧 Hardware Used
 
----
+- ESP32-WROOM board
+- 2 push buttons (GPIO 14 and 4)
+- 2 LEDs (GPIO 17 and 16)
+- HW-417-V1.2 USB-to-TTL module for UART logging
 
-## 🧪 3. UART Logging
+### 🧱 Software Architecture
 
-I have included UART log messages for:
-- Button press and release detection
-- Mode changes (LEFT, RIGHT, HAZARD, OFF)
-- LED state changes (ON/OFF) during blinking
+- Modular C drivers for GPIO, PWM, Hardware Timer
+- Application logic isolated in `indicator_app.c`
+- Simulink-based logic integration (planned for future)
+- Scheduler using FreeRTOS tasks (100ms)
 
-### UART Logging Details:
-- Logs are currently captured using **ESP-IDF Serial Monitor**
-- I plan to additionally log using **Tera Term** with the **HW-417-V1.2 UART-to-TTL Converter**
-  - If logs from Tera Term are captured in time, I’ll include them in the final submission.
-  - If not, I’ll submit the logs from ESP-IDF monitor and mention this clearly in the report.
+### 📌 Note on Simulink
+The MATLAB Simulink integration is pending and will be added later. Current version uses C logic directly.
 
 ---
 
-## 🧩 4. Simulink Integration (Planned)
-
-As per assignment requirement, the **indicator logic should be developed in MATLAB Simulink**. Currently, the application logic is fully developed in C, meeting all system-level requirements.
-
-✅ Once the Simulink logic is designed and auto-generated code is ready, I will replace or integrate it with the `indicator_app.c` logic in a modular fashion.
-
-> ❗**Current Status:** Simulink integration is pending and will be added after this submission. I will update the documentation accordingly later.
-
----
-
-## 📁 5. Project Structure
+## 📂 Folder Structure
 
 ```
-indicator_system_project/
-├── gpio_driver.c / .h
-├── pwm_driver.c / .h
-├── hw_timer_driver.c / .h
-├── indicator_app.c / .h
-├── indicator_main.c         // Main scheduler (100ms base & app task)
-├── CMakeLists.txt
+esp32-indicator-system/
+├── gpio_driver.c/h
+├── pwm_driver.c/h
+├── hw_timer_driver.c/h
+├── indicator_app.c/h
+├── indicator_main.c
+├── indicator_log.txt
 └── README.md
 ```
 
 ---
 
-## 🔗 6. Submission Checklist
+## 📦 Future Enhancements
 
-| Item                                       | Status        | Link or Note                         |
-|--------------------------------------------|---------------|--------------------------------------|
-| ✅ Source Code GitHub Link                 | *To be added* | Will push once finalized             |
-| ✅ Video Recording (Zipped via GDrive)     | *To be added* | Will include demo of full working    |
-| ✅ UART Log File                           | Ready         | From ESP-IDF (Tera Term optional)    |
+- MATLAB Simulink integration for application logic
+- BLE communication for remote indicator control (per assignment scope)
+- Button latching mechanism to improve edge detection robustness
 
 ---
 
-## ⚠️ 7. Known Limitation
+## 📣 Acknowledgements
 
-There is a small limitation in the current implementation:  
-If the left or right button is pressed immediately after the other (before release), switching may occur unexpectedly.
-
-🔧 This can be resolved by using **button latching logic** in the future. For now, the implementation is **fully functional** and meets the expected requirements.
-
----
-
-### 📌 Final Note
-
-This submission is fully verified and tested on hardware.  
-Simulink-based application logic will be integrated and updated in the next version.
-
----
-
-*Submitted by: Vivek*  
-*Date: July 20, 2025*
+All testing was done manually and logs were saved via TTL module using Tera Term. The system behaves as expected with minor edge-case limitations noted in the documentation.

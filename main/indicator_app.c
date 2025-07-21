@@ -55,7 +55,7 @@ void indicator_app_init(void)
 }
 
 /**
- * @brief Main state machine update function. Call every 100ms.
+ * @brief Main state machine update function. Call every 100ms.(by Scheduler)
  */
 void indicator_app_update(void)
 {
@@ -66,17 +66,15 @@ void indicator_app_update(void)
     bool left_edge = curr_left && !prev_left;
     bool right_edge = curr_right && !prev_right;
 
-    // Handle new press
+    // Handle new  button press
     if (left_edge || right_edge) {
-        ESP_LOGI(TAG, "Button Press Detected");
-        if (left_edge) printf("[UART] Left Button Pressed\n");
-        if (right_edge) printf("[UART] Right Button Pressed\n");
-
+        //ESP_LOGI(TAG, "Button Press Detected");     //optional debug log
+ 
         if (!hw_timer_is_running())
             hw_timer_start();
 
     } else if (!curr_left && !curr_right) {
-        hw_timer_stop();  // Stop timer only if both buttons are released
+        hw_timer_stop();  // Stop timer only if any (or) both buttons are released
     }
 
     // Update state for next cycle
@@ -85,7 +83,7 @@ void indicator_app_update(void)
 
     // ISR fired (optional debug log)
     if (isr_fired) {
-        ESP_LOGI(TAG, "ISR Callback Fired!");
+        //ESP_LOGI(TAG, "ISR Callback Fired!");
         isr_fired = false;
     }
 
@@ -98,31 +96,35 @@ void indicator_app_update(void)
 
         // Hazard mode: both buttons held
         if (left && right) {
-            ESP_LOGI(TAG, "Both Buttons Held -> Toggling Hazard");
+            ESP_LOGI(TAG, "BOTH BUTTONS PRESSED ->  Toggling Hazard");
             current_mode = (current_mode == INDICATOR_HAZARD) ? INDICATOR_OFF : INDICATOR_HAZARD;
-            printf("[UART] Both Buttons Held for 1s. Mode: HAZARD ON\n");
+            (current_mode == INDICATOR_HAZARD) ? 
+            printf("[UART] Both Buttons Held for 1(Second)  | Mode: HAZARD ON\n"):
+            printf("[UART] Both Buttons Held for 1(Second)  | Mode: HAZARD OFF\n");
             return;
         }
 
-        // Exit hazard mode if only one held
+        // Exit hazard mode if any button is held
         if (current_mode == INDICATOR_HAZARD) {
-            ESP_LOGI(TAG, "Exiting Hazard Mode");
+			ESP_LOGI(TAG,"BUTTON PRESS DETECTED -> Exiting Hazard");
+			printf("[UART] Button Held for 1(Second)        | Mode: HAZARD OFF\n");
             current_mode = INDICATOR_OFF;
-            printf("[UART] Hazard Mode OFF\n");
             return;
         }
 
         // Regular toggle for individual buttons
         if (left) {
-            ESP_LOGI(TAG, "Left Button Held");
+            ESP_LOGI(TAG, "LEFT BUTTON PRESSED -> Handling Left Indicator");
+            if(current_mode == INDICATOR_RIGHT) printf("[UART] Left Button Held for 1(Second)   | Mode: RIGHT INDICATOR OFF\n");
             current_mode = (current_mode == INDICATOR_LEFT) ? INDICATOR_OFF : INDICATOR_LEFT;
-            printf("[UART] Left Button Held for 1s. Mode: %s\n",
+            printf("[UART] Left Button Held for 1(Second)   | Mode: %s\n",
                    current_mode == INDICATOR_LEFT ? "LEFT INDICATOR ON" : "LEFT INDICATOR OFF");
 
         } else if (right) {
-            ESP_LOGI(TAG, "Right Button Held");
+            ESP_LOGI(TAG, "RIGHT BUTTON PRESSED -> Handling Right Indicator");
+            if(current_mode == INDICATOR_LEFT) printf("[UART] Right Button Held for 1(Second)  | Mode: LEFT INDICATOR OFF\n");
             current_mode = (current_mode == INDICATOR_RIGHT) ? INDICATOR_OFF : INDICATOR_RIGHT;
-            printf("[UART] Right Button Held for 1s. Mode: %s\n",
+            printf("[UART] Right Button Held for 1(Second)  | Mode: %s\n",
                    current_mode == INDICATOR_RIGHT ? "RIGHT INDICATOR ON" : "RIGHT INDICATOR OFF");
         }
     }
@@ -151,19 +153,19 @@ static void update_led_pwm(indicator_mode_t mode, bool led_state)
         case INDICATOR_LEFT:
             pwm_set_duty(LEFT_LED_CHANNEL, duty);
             pwm_set_duty(RIGHT_LED_CHANNEL, 0);
-            printf("[UART] LED Status: %s  | Mode: %s\n", led_state ? "ON" : "OFF", mode_str[mode]);
+            printf("[UART] LED Status: %s | Mode: %s\n", led_state ? "ON " : "OFF", mode_str[mode]);
             break;
 
         case INDICATOR_RIGHT:
             pwm_set_duty(RIGHT_LED_CHANNEL, duty);
             pwm_set_duty(LEFT_LED_CHANNEL, 0);
-            printf("[UART] LED Status: %s  | Mode: %s\n", led_state ? "ON" : "OFF", mode_str[mode]);
+            printf("[UART] LED Status: %s | Mode: %s\n", led_state ? "ON " : "OFF", mode_str[mode]);
             break;
 
         case INDICATOR_HAZARD:
             pwm_set_duty(LEFT_LED_CHANNEL, duty);
             pwm_set_duty(RIGHT_LED_CHANNEL, duty);
-            printf("[UART] LED Status: %s  | Mode: %s\n", led_state ? "ON" : "OFF", mode_str[mode]);
+            printf("[UART] LED Status: %s | Mode: %s\n", led_state ? "ON " : "OFF", mode_str[mode]);
             break;
 
         default:
