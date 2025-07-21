@@ -100,4 +100,36 @@ This part is **pending** and **will be added in the next version**.
 ---
 
 ## 📦 Folder Structure
+esp32-indicator-system/
+├── gpio_driver.c/h
+├── pwm_driver.c/h
+├── hw_timer_driver.c/h
+├── indicator_app.c/h
+├── indicator_main.c
+├── CMakeLists.txt
+├── indicator_log.txt // UART logs from Tera Term
+└── README.md
 
+
+---
+
+## ⚠️ Known Limitation
+
+Currently, if you press one button and immediately press the other before releasing the first, the logic may unintentionally switch indicators.
+
+📌 This can be improved later using a **button latching mechanism**, which is not yet implemented.
+
+---
+
+## ✅ Summary
+
+- The assignment meets all **functional requirements**.
+- The code is **tested** and **working** on ESP32 hardware.
+- Logs are published via UART and captured cleanly using TTL module.
+- BLE and Simulink-based control are **planned for the next version**.
+
+---
+
+*Submitted by: Uppula Vivekananda Raman*  
+*Sreenidhi Institute of Science and Technology*  
+*Date: 21-07-2025*
