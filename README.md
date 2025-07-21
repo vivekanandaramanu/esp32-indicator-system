@@ -99,20 +99,20 @@ This part is **pending** and **will be added in the next version**.
 
 ---
 
-## 📦 Folder Structure
-esp32-indicator-system/
-├── gpio_driver.c/h
-├── pwm_driver.c/h
-├── hw_timer_driver.c/h
-├── indicator_app.c/h
-├── indicator_main.c
-├── CMakeLists.txt
-├── indicator_log.txt // UART logs from Tera Term
-└── README.md
+## 📁 5. Project Structure
 
+```
+indicator_system_project/
+├── gpio_driver.c / .h
+├── pwm_driver.c / .h
+├── hw_timer_driver.c / .h
+├── indicator_app.c / .h
+├── indicator_main.c         // Main scheduler (100ms base & app task)
+├── CMakeLists.txt
+└── README.md
+```
 
 ---
-
 ## ⚠️ Known Limitation
 
 Currently, if you press one button and immediately press the other before releasing the first, the logic may unintentionally switch indicators.
