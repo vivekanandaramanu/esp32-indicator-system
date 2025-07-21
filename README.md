@@ -107,7 +107,7 @@ indicator_system_project/
 ├── pwm_driver.c / .h
 ├── hw_timer_driver.c / .h
 ├── indicator_app.c / .h
-├── indicator_main.c         // Main scheduler (100ms base & app task)
+├── app_main.c         // Main scheduler (100ms base & app task)
 ├── CMakeLists.txt
 └── README.md
 ```
